@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuiz ASK Tingkatan 1: Struktur Kawalan Pilihan</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka', cursive, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px 10px;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #FF9A9E, #FECFEF, #A1C4FD, #C2E9FB);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 680px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 24px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin: auto;
+        }
+
+        .header-wrapper {
+            width: 100%;
+            background: #FFFDE7;
+            border: 3px solid #FFE082;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-img {
+            max-height: 90px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .banner-box {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .banner-img {
+            width: 100%;
+            height: auto;
+            max-height: none;
+            object-fit: contain;
+            border-radius: 12px;
+            display: block;
+        }
+
+        h1 {
+            color: #E91E63;
+            text-shadow: 2px 2px #FFD54F;
+            margin: 10px 0 5px 0;
+            font-size: 26px;
+        }
+
+        .subtitle {
+            color: #555;
+            font-size: 15px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 3px solid #81D4FA;
+            border-radius: 14px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #29B6F6;
+        }
+
+        button.btn-start, button.btn-next {
+            background-color: #FF4081;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px 35px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #C2185B;
+            transition: all 0.2s;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        button.btn-start:hover, button.btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #C2185B;
+        }
+
+        button.btn-start:active, button.btn-next:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #C2185B;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            padding: 16px 10px;
+            border: none;
+            border-radius: 18px;
+            font-size: 17px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+            transition: transform 0.1s, filter 0.2s;
+            word-break: break-word;
+        }
+
+        .option-btn:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+        }
+
+        .opt-0 { background-color: #FF5252; }
+        .opt-1 { background-color: #7C4DFF; }
+        .opt-2 { background-color: #00E676; }
+        .opt-3 { background-color: #FF9100; }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 15px;
+            background: #E1F5FE;
+            padding: 10px 16px;
+            border-radius: 12px;
+        }
+
+        .question-box {
+            background: #FFF9C4;
+            border: 3px dashed #FBC02D;
+            padding: 20px;
+            border-radius: 18px;
+            font-size: 19px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .code-box {
+            background: #263238;
+            color: #80CBC4;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: left;
+            margin: 12px 0;
+            font-size: 15px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .working-box {
+            background: #FFEBEE;
+            border: 2px solid #EF5350;
+            border-radius: 16px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: left;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .working-title {
+            color: #C62828;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .correct-ans-highlight {
+            background: #E8F5E9;
+            border: 2px solid #66BB6A;
+            color: #2E7D32;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .working-content {
+            font-size: 15px;
+            color: #333;
+            background: #FFF;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #FFCDD2;
+            white-space: pre-line;
+            line-height: 1.5;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #FF4081;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 16px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: BORANG NAMA & KELAS (BANNER & LOGO) -->
+    <div id="page1" class="container">
+        <div class="header-wrapper">
+            
+            <div class="banner-box">
+                <img src="ASKWI.png" alt="Banner ASK Cikgu Wi" class="banner-img">
+            </div>
+        </div>
+        
+        <h1>KUIZ ASK TINGKATAN 1</h1>
+        <div class="subtitle">Bab 3: Algoritma (Struktur Kawalan Pilihan)</div>
+
+        <div class="input-group">
+            <label for="studentName">Nama Murid:</label>
+            <input type="text" id="studentName" placeholder="Masukkan nama penuh anda...">
+        </div>
+
+        <div class="input-group">
+            <label for="studentClass">Kelas:</label>
+            <input type="text" id="studentClass" placeholder="Contoh: 1 Mawar">
+        </div>
+
+        <button class="btn-start" onclick="startQuiz()">MULA KUIZ 🚀</button>
+    </div>
+
+    <!-- PAGE 2: SOALAN (TANPA BANNER) -->
+    <div id="page2" class="container hidden">
+        <div class="q-header">
+            <span id="q-count">Soalan 1/15</span>
+            <span id="score-count">Markah: 0</span>
+        </div>
+
+        <div id="question" class="question-box"></div>
+        <div id="code-display" class="code-box hidden"></div>
+
+        <div id="options-container" class="options-grid">
+            <button class="option-btn opt-0" onclick="checkAnswer(0)" id="btn0">A</button>
+            <button class="option-btn opt-1" onclick="checkAnswer(1)" id="btn1">B</button>
+            <button class="option-btn opt-2" onclick="checkAnswer(2)" id="btn2">C</button>
+            <button class="option-btn opt-3" onclick="checkAnswer(3)" id="btn3">D</button>
+        </div>
+
+        <div id="working-area" class="working-box hidden">
+            <div class="working-title">💣 BOOM! Jawapan Salah</div>
+            <div id="correct-ans-box" class="correct-ans-highlight"></div>
+            <div id="working-text" class="working-content"></div>
+            <button class="btn-next" onclick="nextQuestion()">Seterusnya ➔</button>
+        </div>
+    </div>
+
+    <!-- PAGE 3: KEPUTUSAN -->
+    <div id="page3" class="container hidden">
+        <h1 style="font-size: 32px; color: #4CAF50;">🎉 TAHNIAH! 🎉</h1>
+        <p id="result-message" style="font-size: 18px; color: #333; margin-top: 15px;"></p>
+        <h2 id="final-score" style="font-size: 38px; color: #E91E63; margin: 15px 0;"></h2>
+        
+        <div id="loading" class="hidden">
+            <div class="loader"></div>
+            <p style="color: #666;">Menghantar markah ke Google Sheet Guru...</p>
+        </div>
+        <p id="status-send" style="font-weight: bold; font-size: 16px; margin-top: 15px;"></p>
+    </div>
+
+    <script>
+        // URL WEB APP APPSCRIPT TERKINI
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9a4wc7kRBurVY3L4g9YCQzrnXGN-m-fLeE0Dl8bYbCDw3guVkKM81yUZaow5vg1nVfA/exec";
+
+        const rawQuizData = [
+            { 
+                q: "Apakah fungsi utama Struktur Kawalan Pilihan dalam pengaturcaraan?", 
+                correctOpt: "Melaksanakan tindakan berdasarkan syarat yang dipenuhi",
+                wrongOpts: [
+                    "Mengulang sesuatu arahan sehingga penat",
+                    "Menyimpan data nama dan kelas murid",
+                    "Memasukkan maklumat melalui papan kekunci"
+                ], 
+                work: "Penerangan: Struktur kawalan pilihan membolehkan keputusan dibuat berasaskan penetapan syarat BENAR atau PALSU." 
+            },
+            { 
+                q: "Apakah tiga jenis utama Struktur Kawalan Pilihan?", 
+                correctOpt: "Pilihan Tunggal, Pilihan Dwi, dan Pilihan Pelbagai",
+                wrongOpts: [
+                    "Pilihan Mudah, Pilihan Sedang, dan Pilihan Sukar",
+                    "Pilihan Awal, Pilihan Tengah, dan Pilihan Akhir",
+                    "Pilihan Input, Pilihan Proses, dan Pilihan Output"
+                ], 
+                work: "Penerangan: 3 jenis struktur kawalan pilihan ialah Pilihan Tunggal (if), Pilihan Dwi (if-else), dan Pilihan Pelbagai (if-else if-else)." 
+            },
+            { 
+                q: "Apakah kata kunci yang digunakan untuk Pilihan Dwi dalam pseudokod?", 
+                correctOpt: "JIKA ... MAKA ... JIKA TIDAK",
+                wrongOpts: [
+                    "JIKA ... MAKA sahaja",
+                    "SELAGI ... LAKUKAN",
+                    "ULANG ... SEHINGGA"
+                ], 
+                work: "Penerangan: Pilihan Dwi mempunyai dua pilihan tindakan yang diwakili oleh kata kunci JIKA (syarat), MAKA (tindakan 1), JIKA TIDAK (tindakan 2)." 
+            },
+            { 
+                q: "Dalam Carta Alir, apakah nama dan fungsi simbol Rombus?", 
+                correctOpt: "Simbol Pilihan / Keputusan untuk menguji syarat",
+                wrongOpts: [
+                    "Simbol Proses untuk mengira nombor",
+                    "Simbol Terminal untuk memulakan carta alir",
+                    "Simbol Input/Output untuk membaca data"
+                ], 
+                work: "Penerangan: Simbol Rombus (Decision) digunakan untuk menguji syarat bagi menentukan aliran Ya (Benar) atau Tidak (Palsu)." 
+            },
+            { 
+                q: "Apakah kelebihan menggunakan Pilihan Pelbagai berbanding Pilihan Dwi?", 
+                correctOpt: "Dapat menguji lebih daripada dua pilihan syarat",
+                wrongOpts: [
+                    "Menjadikan atur cara berjalan lebih perlahan",
+                    "Tidak memerlukan sebarang syarat dalam kod",
+                    "Hanya berfungsi untuk nombor genap sahaja"
+                ], 
+                work: "Penerangan: Pilihan pelbagai digunakan apabila terdapat 3 atau lebih pilihan syarat berlainan (contoh: Gred A, B, C, D, F)." 
+            },
+            { 
+                q: "Ibu memberitahu Ali: 'Jika hari ini hujan, bawa payung ke sekolah.' Apakah jenis struktur kawalan pilihan bagi situasi ini?", 
+                correctOpt: "Pilihan Tunggal",
+                wrongOpts: ["Pilihan Dwi", "Pilihan Pelbagai", "Struktur Kawalan Ulangan"], 
+                work: "Penerangan: Situasi ini hanya mempunyai SATU tindakan jika syarat hujan dipenuhi (bawa payung). Jika tidak hujan, tiada tindakan dinyatakan." 
+            },
+            { 
+                q: "Kelab Badminton sekolah menentukan: Murid yang tingginya 150 cm ke atas layak masuk pasukan, manakala murid di bawah 150 cm diletakkan dalam simpanan. Ini merupakan:", 
+                correctOpt: "Pilihan Dwi",
+                wrongOpts: ["Pilihan Tunggal", "Pilihan Pelbagai", "Struktur Kawalan Berurutan"], 
+                work: "Penerangan: Terdapat DUA pilihan tindakan bergantung kepada syarat tinggi: Tindakan 1 (Masuk pasukan) atau Tindakan 2 (Simpanan)." 
+            },
+            { 
+                q: "Sebuah kedai buku memberikan diskaun mengikut jumlah belanja: >RM200 (Diskaun 20%), >RM100 (Diskaun 10%), selain itu tiada diskaun. Apakah jenis kawalan pilihan bagi situasi ini?", 
+                correctOpt: "Pilihan Pelbagai",
+                wrongOpts: ["Pilihan Tunggal", "Pilihan Dwi", "Struktur Kawalan Berurutan"], 
+                work: "Penerangan: Situasi mengandungi lebih daripada 2 syarat berbeza (Diskaun 20%, Diskaun 10%, dan Tiada diskaun)." 
+            },
+            { 
+                q: "Pintu automatik pusat beli-belah akan terbuka HANYA APABILA mengesan kehadiran pengunjung di hadapannya. Ini mewakili syarat:", 
+                correctOpt: "Jika mengesan pengunjung = BENAR, pintu terbuka",
+                wrongOpts: [
+                    "Jika mengesan pengunjung = PALSU, pintu terbuka",
+                    "Pintu sentiasa terbuka tanpa mengira pengunjung",
+                    "Pintu dikawal secara ulangan 10 kali"
+                ], 
+                work: "Penerangan: Pintu hanya terbuka jika syarat 'mengesan pengunjung' bernilai BENAR." 
+            },
+            { 
+                q: "Sistem kelayakan mengundi menetapkan individu berumur 18 tahun dan ke atas layak mengundi. Manakah penyataan yang PALSU?", 
+                correctOpt: "Ahmad berumur 17 tahun dan layak mengundi",
+                wrongOpts: [
+                    "Siti berumur 18 tahun dan layak mengundi",
+                    "Maniam berumur 25 tahun dan layak mengundi",
+                    "Chong berumur 16 tahun dan tidak layak mengundi"
+                ], 
+                work: "Penerangan: Syarat layak mengundi ialah umur >= 18. Maka Ahmad (17 tahun) adalah TIDAK LAYAK mengundi." 
+            },
+            { 
+                q: "Apakah output yang dipaparkan jika input markah yang dimasukkan ialah 40?",
+                code: "1. MULA\n2. MASUKKAN markah\n3. JIKA markah >= 40 MAKA\n     PAPAR 'LULUS'\n   JIKA TIDAK\n     PAPAR 'GAGAL'\n4. TAMAT", 
+                correctOpt: "LULUS",
+                wrongOpts: ["GAGAL", "Ralat", "Tiada Paparan"], 
+                work: "Penerangan: Kerana markah ialah 40, syarat '40 >= 40' adalah BENAR. Oleh itu blok MAKA diproses dan 'LULUS' dipaparkan." 
+            },
+            { 
+                q: "Apakah output jika nilai bilangan_buku = 2?",
+                code: "JIKA bilangan_buku > 5 MAKA\n   PAPAR 'Dapat Beg Percuma'\nJIKA TIDAK\n   PAPAR 'Terima Kasih'", 
+                correctOpt: "Terima Kasih",
+                wrongOpts: ["Dapat Beg Percuma", "2", "Ralat"], 
+                work: "Penerangan: Syarat (2 > 5) adalah PALSU. Maka tindakan di bawah JIKA TIDAK dijalankan iaitu paparkan 'Terima Kasih'." 
+            },
+            { 
+                q: "Apakah output yang dipaparkan jika nilai suhu = 38.0?",
+                code: "JIKA suhu >= 38.0 MAKA\n   PAPAR 'Demam Tinggi'\nJIKA TIDAK JIKA suhu >= 37.0 MAKA\n   PAPAR 'Demam Biasa'\nJIKA TIDAK\n   PAPAR 'Suhu Normal'", 
+                correctOpt: "Demam Tinggi",
+                wrongOpts: ["Demam Biasa", "Suhu Normal", "Ralat"], 
+                work: "Penerangan: Syarat pertama (38.0 >= 38.0) adalah BENAR. Mesej 'Demam Tinggi' dipaparkan dan syarat seterusnya dilangkau." 
+            },
+            { 
+                q: "Kenal pasti Ralat Logik yang wujud dalam susunan di bawah:",
+                code: "1. MULA\n2. JIKA umurditerima >= 12 MAKA\n3. MASUKKAN umurditerima\n4. PAPAR 'Kategori Kanak-kanak'\n5. TAMAT", 
+                correctOpt: "Input 'umurditerima' dimasukkan selepas syarat diuji",
+                wrongOpts: [
+                    "Penggunaan kata kunci MULA di awal",
+                    "Penggunaan perkataan PAPAR",
+                    "Tidak ada sebarang ralat"
+                ], 
+                work: "Penerangan: Nilai 'umurditerima' mesti dimasukkan dahulu (Baris 3) sebelum syarat JIKA (Baris 2) dapat diuji." 
+            },
+            { 
+                q: "Apakah keputusan yang dipaparkan jika nilai umur = 15?",
+                code: "JIKA umur >= 18 MAKA\n   PAPAR 'Tiket Dewasa'\nJIKA TIDAK JIKA umur >= 13 MAKA\n   PAPAR 'Tiket Remaja'\nJIKA TIDAK\n   PAPAR 'Tiket Kanak-kanak'", 
+                correctOpt: "Tiket Remaja",
+                wrongOpts: ["Tiket Dewasa", "Tiket Kanak-kanak", "15"], 
+                work: "Penerangan:\n- Uji syarat 1 (15 >= 18) ➔ PALSU\n- Uji syarat 2 (15 >= 13) ➔ BENAR! Output = 'Tiket Remaja'." 
+            }
+        ];
+
+        let quizData = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let studentName = "";
+        let studentClass = "";
+
+        // Fungsi Randomize Array (Fisher-Yates Shuffle)
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // 1. Bunyi Tepuk Tangan & Sorakan (Jawapan Betul)
+        function playClapSound() {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    let osc = audioCtx.createOscillator();
+                    let gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(250 + Math.random() * 500, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.15);
+                }, i * 40);
+            }
+        }
+
+        // 2. Bunyi Letupan Bom (Jawapan Salah)
+        function playBombSound() {
+            // Bunyi Low Frequency Boom
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.6);
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.6);
+
+            // Bunyi Noise Letupan
+            let bufferSize = audioCtx.sampleRate * 0.4;
+            let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            let data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+            let noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+            let noiseGain = audioCtx.createGain();
+            noiseGain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            noise.connect(noiseGain);
+            noiseGain.connect(audioCtx.destination);
+            noise.start();
+        }
+
+        function startQuiz() {
+            studentName = document.getElementById("studentName").value.trim();
+            studentClass = document.getElementById("studentClass").value.trim();
+
+            if (studentName === "" || studentClass === "") {
+                alert("Sila masukkan Nama dan Kelas anda terlebih dahulu!");
+                return;
+            }
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            // Rawakkan susunan soalan & pilihan jawapan
+            quizData = shuffle([...rawQuizData]).map(item => {
+                let options = shuffle([item.correctOpt, ...item.wrongOpts]);
+                let correct = options.indexOf(item.correctOpt);
+                return {
+                    q: item.q,
+                    code: item.code || null,
+                    options: options,
+                    correct: correct,
+                    correctText: item.correctOpt,
+                    work: item.work
+                };
+            });
+
+            document.getElementById("page1").classList.add("hidden");
+            document.getElementById("page2").classList.remove("hidden");
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            document.getElementById("working-area").classList.add("hidden");
+            document.getElementById("options-container").classList.remove("hidden");
+
+            let q = quizData[currentQuestion];
+            document.getElementById("q-count").innerText = `Soalan ${currentQuestion + 1}/15`;
+            document.getElementById("score-count").innerText = `Markah: ${score}`;
+            document.getElementById("question").innerText = q.q;
+
+            let codeBox = document.getElementById("code-display");
+            if (q.code) {
+                codeBox.innerText = q.code;
+                codeBox.classList.remove("hidden");
+            } else {
+                codeBox.classList.add("hidden");
+            }
+
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`btn${i}`).innerText = q.options[i];
+            }
+        }
+
+        function checkAnswer(selectedIndex) {
+            let q = quizData[currentQuestion];
+            let correctIndex = q.correct;
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                playClapSound();
+                nextQuestion();
+            } else {
+                playBombSound();
+                document.getElementById("options-container").classList.add("hidden");
+                
+                // Tunjukkan jawapan betul & penerangan
+                document.getElementById("correct-ans-box").innerText = `✅ Jawapan Betul: ${q.correctText}`;
+                document.getElementById("working-text").innerText = q.work;
+                document.getElementById("working-area").classList.remove("hidden");
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById("page2").classList.add("hidden");
+            document.getElementById("page3").classList.remove("hidden");
+
+            let percentage = Math.round((score / 15) * 100);
+            document.getElementById("result-message").innerText = `Syabas, ${studentName} (${studentClass})! Anda telah melengkapkan Kuiz Struktur Kawalan Pilihan.`;
+            document.getElementById("final-score").innerText = `Markah: ${score} / 15 (${percentage}%)`;
+
+            sendResultToGoogleSheet(percentage);
+        }
+
+        function sendResultToGoogleSheet(percentage) {
+            document.getElementById("loading").classList.remove("hidden");
+
+            let currentDate = new Date().toLocaleString('ms-MY');
+
+            const params = new URLSearchParams();
+            params.append("tarikh", currentDate);
+            params.append("nama", studentName);
+            params.append("kelas", studentClass);
+            params.append("markah", `${score}/15`);
+            params.append("peratus", `${percentage}%`);
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: params.toString()
+            })
+            .then(() => {
+                document.getElementById("loading").classList.add("hidden");
+                document.getElementById("status-send").style.color = "#2E7D32";
+                document.getElementById("status-send").innerText = "✅ Markah dan kehadiran berjaya direkodkan secara automatik dalam Google Sheet Guru!";
+            })
+            .catch(err => {
+                document.getElementById("loading").classList.add("hidden");
+                document.getElementById("status-send").style.color = "#C62828";
+                document.getElementById("status-send").innerText = "⚠️ Rekod tidak dapat dihantar. Sila semak sambungan internet anda.";
+                console.error(err);
+            });
+        }
+    </script>
+</body>
+</html>
